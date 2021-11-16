@@ -87,9 +87,9 @@ contract SupplyChain {
 
   // modifier forSale
   modifier forSale(uint _sku) {
-    require(items[_sku].state != State.Sold);
-    require(items[_sku].state != State.Shipped);
-    require(items[_sku].state != State.Received);
+    require(items[_sku].price > 0);
+    require(items[_sku].state == State.ForSale);
+    require(items[_sku].seller != address(0));
     _; // continue executing rest of method body
   }
 
@@ -113,6 +113,7 @@ contract SupplyChain {
     // 1. Set the owner to the transaction sender
     // 2. Initialize the sku count to 0. Question, is this necessary? NO
     owner = msg.sender;
+    skuCount = 0;
   }
 
   function addItem(string memory _name, uint _price) public returns (bool) {
